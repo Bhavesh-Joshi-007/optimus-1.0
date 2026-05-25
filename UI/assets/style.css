@@ -1,0 +1,273 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #030711;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Background Grid */
+.grid {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(0, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: gridMove 12s linear infinite;
+}
+
+@keyframes gridMove {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(50px);
+  }
+}
+
+/* Ambient Glow */
+.ambient {
+  position: absolute;
+  width: 700px;
+  height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.18), transparent 70%);
+  filter: blur(40px);
+  animation: pulse 5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+/* Main OPTIMUS */
+.OPTIMUS {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Outer Rotating Ring */
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 255, 255, 0.15);
+}
+
+.ring1 {
+  width: 450px;
+  height: 450px;
+  border-top-color: #00ffff;
+  animation: rotate 12s linear infinite;
+  box-shadow: 0 0 20px #00ffff88;
+}
+
+.ring2 {
+  width: 380px;
+  height: 380px;
+  border-bottom-color: #00ffff;
+  animation: rotateReverse 10s linear infinite;
+}
+
+.ring3 {
+  width: 300px;
+  height: 300px;
+  border-left-color: #00ffff;
+  animation: rotate 7s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotateReverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+/* Center Core */
+.core {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, #00ffff, #001a1a 70%);
+  box-shadow:
+    0 0 20px #00ffff,
+    0 0 60px #00ffff,
+    inset 0 0 30px #00ffff;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.core::before {
+  content: "";
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  border: 1px dashed rgba(0, 255, 255, 0.4);
+  animation: rotate 20s linear infinite;
+}
+
+.core::after {
+  content: "";
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #00ffff;
+  filter: blur(25px);
+  opacity: 0.6;
+}
+
+/* AI Text */
+.title {
+  position: absolute;
+  bottom: -70px;
+  color: #fff;
+  font-size: 34px;
+  letter-spacing: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-shadow: 0 0 10px #00ffff;
+}
+
+.subtitle {
+  position: absolute;
+  bottom: -110px;
+  color: #8fa3b0;
+  letter-spacing: 4px;
+  font-size: 13px;
+}
+
+/* Orbit Dots */
+.dot {
+  position: absolute;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #00ffff;
+  box-shadow: 0 0 20px #00ffff;
+}
+
+/* HUD Lines */
+.hud-line {
+  position: absolute;
+  width: 220px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #00ffff, transparent);
+  opacity: 0.5;
+}
+
+.top {
+  top: 40px;
+}
+
+.bottom {
+  bottom: 40px;
+}
+
+.left {
+  left: 40px;
+  transform: rotate(90deg);
+}
+
+.right {
+  right: 40px;
+  transform: rotate(90deg);
+}
+
+/* Status Card */
+.status {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  width: 260px;
+  padding: 20px;
+  border: 1px solid rgba(0, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.08);
+}
+
+.status h2 {
+  color: #00ffff;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.status p {
+  color: #9cb0bd;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.bar {
+  width: 100%;
+  height: 8px;
+  background: #0a1a24;
+  border-radius: 50px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.fill {
+  width: 80%;
+  height: 100%;
+  background: linear-gradient(90deg, #00ffff, #0088ff);
+  border-radius: 50px;
+}
+
+/* Scan Effect */
+.scan {
+  position: absolute;
+  width: 100%;
+  height: 6px;
+  background: rgba(0, 255, 255, 0.2);
+  box-shadow: 0 0 20px #00ffff;
+  animation: scan 4s linear infinite;
+}
+
+@keyframes scan {
+  0% {
+    top: -10%;
+  }
+  100% {
+    top: 110%;
+  }
+}
