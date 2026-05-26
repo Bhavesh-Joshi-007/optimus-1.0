@@ -11,6 +11,13 @@ window.addEventListener("load", () => {
     ease: "power1.inOut",
   });
 
+  // Delayed startup sound
+  setTimeout(async () => {
+
+    await eel.playOptimusInitialised()();
+
+  }, 1200);
+
   // Core pulse
   gsap.to(".core", {
     scale: 1.08,
@@ -112,6 +119,8 @@ window.addEventListener("load", () => {
         },
       });
 
+      eel.playAssistantSound()
+
       // =========================
       // SHOW SIRI WAVE
       // =========================
@@ -139,6 +148,8 @@ window.addEventListener("load", () => {
           siriWaveSection.style.visibility = "hidden";
         },
       });
+
+      eel.playOptimusSwitchUp()
 
       // =========================
       // SHOW OPTIMUS
