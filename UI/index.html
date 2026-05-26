@@ -4,58 +4,82 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OPTIMUS</title>
-    <link rel="stylesheet" href="./assets/style.css">
-    <!-- GSAP -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <link rel="stylesheet" href="./assets/style.css" />
   </head>
-
+  
   <body>
     <div class="grid"></div>
     <div class="ambient"></div>
-
+    
     <!-- HUD Lines -->
     <div class="hud-line top"></div>
     <div class="hud-line bottom"></div>
     <div class="hud-line left"></div>
     <div class="hud-line right"></div>
-
+    
     <!-- Status Panel -->
     <!-- <div class="status">
       <h2>OPTIMUS SYSTEM</h2>
-
+      
       <p>AI CORE: ACTIVE</p>
       <div class="bar">
         <div class="fill"></div>
       </div>
-
+      
       <p style="margin-top: 15px">VOICE ENGINE: ONLINE</p>
       <div class="bar">
         <div class="fill" style="width: 92%"></div>
       </div>
-
+      
       <p style="margin-top: 15px">AUTOMATION CONTROL: READY</p>
       <div class="bar">
         <div class="fill" style="width: 75%"></div>
       </div>
     </div> -->
-
+    
     <!-- Main OPTIMUS -->
-    <div class="OPTIMUS">
-      <div class="ring ring1"></div>
-      <div class="ring ring2"></div>
-      <div class="ring ring3"></div>
-
-      <!-- <div class="dot"></div> -->
-
-      <div class="core">
-        <div class="scan"></div>
-      </div>
-
-      <div class="title">OPTIMUS</div>
-      <div class="subtitle">PERSONAL AI ASSISTANT</div>
+    <div class="ai-wrapper">
+      <section class="OPTIMUS">
+        <div class="ring ring1"></div>
+        <div class="ring ring2"></div>
+        <div class="ring ring3"></div>
+        
+        <!-- <div class="dot"></div> -->
+        
+        <div class="core">
+          <div class="scan"></div>
+        </div>
+        
+        <div class="title">OPTIMUS</div>
+      </section>
+      
+      <section id="SiriWave">
+        <div class="siri-container"></div>
+      </section>
     </div>
-
+    
+    <!-- Control Buttons -->
+    
+    <div class="controls">
+      <button class="control-btn chat-btn">
+        <i data-lucide="messages-square"></i>
+      </button>
+      
+      <button class="control-btn mic-btn">
+        <i data-lucide="mic"></i>
+      </button>
+      
+      <button class="control-btn setting-btn">
+        <i data-lucide="settings-2"></i>
+      </button>
+    </div>
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/siriwave/dist/siriwave.umd.min.js"></script>
     <script src="./assets/main.js"></script>
     <script src="/eel.js"></script>
   </body>
-</html>
+  </html>
+  

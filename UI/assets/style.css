@@ -62,11 +62,26 @@ body {
 /* Main OPTIMUS */
 .OPTIMUS {
   position: relative;
+  top: -70px;
   width: 500px;
   height: 500px;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* =========================
+   OPTIMUS SECTION
+========================= */
+
+.OPTIMUS{
+
+  opacity:1;
+  visibility:visible;
+
+  transform:scale(1);
+
+  transition:.5s;
 }
 
 /* Outer Rotating Ring */
@@ -263,6 +278,153 @@ body {
   animation: scan 4s linear infinite;
 }
 
+/* =========================
+   CONTROL BUTTONS
+========================= */
+
+.controls {
+  position: absolute;
+  bottom: 50px;
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* BUTTON */
+
+.control-btn {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 255, 255, 0.18);
+  background: rgba(244, 244, 244, 0.04);
+  backdrop-filter: blur(12px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: 0.4s ease;
+  box-shadow:
+    0 0 15px rgba(0, 255, 255, 0.08),
+    inset 0 0 10px rgba(0, 255, 255, 0.08);
+    color: #00ffff;
+}
+
+/* ICONS */
+
+.control-btn i {
+  width: 32px;
+  height: 32px;
+  color: #ffffff;
+  stroke-width: 1.8;
+  transition: 0.4s ease;
+  filter: drop-shadow(0 0 10px #00ffff)
+}
+
+/* HOVER EFFECT */
+
+.control-btn:hover {
+  transform: translateY(-10px) scale(1.08);
+
+  border-color: #00ffff;
+
+  box-shadow:
+    0 0 25px rgba(0, 255, 255, 0.35),
+    0 0 60px rgba(0, 255, 255, 0.12),
+    inset 0 0 20px rgba(0, 255, 255, 0.15);
+}
+
+.control-btn:hover i {
+  transform: scale(1.15) rotate(8deg);
+}
+
+/* GLOW WAVE */
+
+.control-btn::before {
+  content: "";
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(0, 255, 255, 0.15),
+    transparent
+  );
+  transform: rotate(25deg) translateX(-150%);
+  transition: 0.8s;
+}
+
+.control-btn:hover::before {
+  transform: rotate(25deg) translateX(150%);
+}
+
+/* ACTIVE PRESS */
+
+.control-btn:active {
+  transform: scale(0.92);
+}
+
+/* MIC BUTTON SPECIAL */
+
+.mic-btn {
+  animation: micPulse 3s ease-in-out infinite;
+}
+
+/* =========================
+   SIRI WAVE SECTION
+========================= */
+
+.ai-wrapper{
+  position: relative;
+}
+
+#SiriWave{
+  width:100%;
+  height:100vh;
+  position:absolute;
+  top: 50%;
+  left: -50%;
+  transform: translate(25%, -25%);
+  overflow:visible;
+  opacity:0;
+  visibility:hidden;
+  /* transform:scale(.8); */
+  /* z-index:5; */
+}
+
+/* =========================
+   SIRI CONTAINER
+========================= */
+
+.siri-container{
+  width:700px;
+  height:250px;
+  position:relative;
+  filter:
+  drop-shadow(0 0 20px #00ffff)
+  drop-shadow(0 0 60px #00ffff);
+  /* z-index:20; */
+}
+
+@keyframes micPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 20px rgba(0, 255, 255, 0.15),
+      0 0 50px rgba(0, 255, 255, 0.05);
+  }
+
+  50% {
+    box-shadow:
+      0 0 30px rgba(0, 255, 255, 0.35),
+      0 0 80px rgba(0, 255, 255, 0.18);
+  }
+}
+
 @keyframes scan {
   0% {
     top: -10%;
@@ -271,3 +433,4 @@ body {
     top: 110%;
   }
 }
+
