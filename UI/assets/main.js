@@ -13,9 +13,7 @@ window.addEventListener("load", () => {
 
   // Delayed startup sound
   setTimeout(async () => {
-
     await eel.playOptimusInitialised()();
-
   }, 1200);
 
   // Core pulse
@@ -99,71 +97,160 @@ window.addEventListener("load", () => {
    MIC BUTTON CLICK
 ========================= */
 
-  let listening = false;
+  // let listening = false;
 
-  micBtn.addEventListener("click", () => {
-    if (!listening) {
-      listening = true;
+  // micBtn.addEventListener("click", () => {
+  //   if (!listening) {
+  //     listening = true;
 
-      // =========================
-      // HIDE OPTIMUS
-      // =========================
+  //     // =========================
+  //     // HIDE OPTIMUS
+  //     // =========================
 
-      gsap.to(".OPTIMUS", {
-        opacity: 0,
-        scale: 0.7,
-        duration: 0.8,
-        ease: "power4.inOut",
-        onComplete: () => {
-          optimusSection.style.visibility = "hidden";
-        },
-      });
+  //     gsap.to(".OPTIMUS", {
+  //       opacity: 0,
+  //       scale: 0.7,
+  //       duration: 0.8,
+  //       ease: "power4.inOut",
+  //       onComplete: () => {
+  //         optimusSection.style.visibility = "hidden";
+  //       },
+  //     });
 
-      eel.playAssistantSound()
+  //     eel.playAssistantSound()
 
-      // =========================
-      // SHOW SIRI WAVE
-      // =========================
+  //     // =========================
+  //     // SHOW SIRI WAVE
+  //     // =========================
 
-      siriWaveSection.style.visibility = "visible";
+  //     siriWaveSection.style.visibility = "visible";
 
-      gsap.to("#SiriWave", {
-        opacity: 1,
-        duration: 1,
-        delay: 1,
-        ease: "power4.out",
-      });
-    } else {
-      listening = false;
+  //     gsap.to("#SiriWave", {
+  //       opacity: 1,
+  //       duration: 1,
+  //       delay: 1,
+  //       ease: "power4.out",
+  //     });
 
-      // =========================
-      // HIDE SIRI WAVE
-      // =========================
+  //     eel.takeCommand()()
+  //   } else {
+  //     listening = false;
 
-      gsap.to("#SiriWave", {
-        opacity: 0,
-        duration: 0.8,
-        ease: "power4.inOut",
-        onComplete: () => {
-          siriWaveSection.style.visibility = "hidden";
-        },
-      });
+  //     // =========================
+  //     // HIDE SIRI WAVE
+  //     // =========================
 
-      eel.playOptimusSwitchUp()
+  //     gsap.to("#SiriWave", {
+  //       opacity: 0,
+  //       duration: 0.8,
+  //       ease: "power4.inOut",
+  //       onComplete: () => {
+  //         siriWaveSection.style.visibility = "hidden";
+  //       },
+  //     });
 
-      // =========================
-      // SHOW OPTIMUS
-      // =========================
+  //     eel.playOptimusSwitchUp()
 
-      optimusSection.style.visibility = "visible";
+  //     // =========================
+  //     // SHOW OPTIMUS
+  //     // =========================
 
-      gsap.to(".OPTIMUS", {
-        opacity: 1,
-        scale: 1,
-        duration: 1,
-        delay: .7,
-        ease: "power4.out",
-      });
-    }
+  //     optimusSection.style.visibility = "visible";
+
+  //     gsap.to(".OPTIMUS", {
+  //       opacity: 1,
+  //       scale: 1,
+  //       duration: 1,
+  //       delay: .7,
+  //       ease: "power4.out",
+  //     });
+  //   }
+  // });
+
+  /* =========================
+   MIC BUTTON CLICK
+========================= */
+
+  micBtn.addEventListener("click", async () => {
+    // Prevent Multiple Clicks
+    micBtn.disabled = true;
+
+    // =========================
+    // HIDE OPTIMUS
+    // =========================
+
+    gsap.to(".OPTIMUS", {
+      opacity: 0,
+      scale: 0.7,
+      duration: 0.8,
+      ease: "power4.inOut",
+      onComplete: () => {
+        optimusSection.style.visibility = "hidden";
+      },
+    });
+
+    // =========================
+    // PLAY ACTIVATION SOUND
+    // =========================
+
+    await eel.playAssistantSound()();
+
+    // =========================
+    // SHOW SIRI WAVE
+    // =========================
+
+    siriWaveSection.style.visibility = "visible";
+
+    gsap.to("#SiriWave", {
+      opacity: 1,
+      duration: 1,
+      ease: "power4.out",
+    });
+
+    // =========================
+    // START LISTENING
+    // =========================
+
+    let command = await eel.allCommands()();
+
+    console.log("User Said:", command);
+
+    // =========================
+    // HIDE SIRI WAVE
+    // =========================
+
+    gsap.to("#SiriWave", {
+      opacity: 0,
+      duration: 0.8,
+      ease: "power4.inOut",
+      onComplete: () => {
+        siriWaveSection.style.visibility = "hidden";
+      },
+    });
+
+    // =========================
+    // PLAY SWITCH SOUND
+    // =========================
+
+    await eel.playOptimusSwitchUp()();
+
+    // =========================
+    // SHOW OPTIMUS AGAIN
+    // =========================
+
+    optimusSection.style.visibility = "visible";
+
+    gsap.to(".OPTIMUS", {
+      opacity: 1,
+      scale: 1,
+      duration: 1,
+      ease: "power4.out",
+    });
+
+    // =========================
+    // ENABLE BUTTON AGAIN
+    // =========================
+
+    micBtn.disabled = false;
   });
 });

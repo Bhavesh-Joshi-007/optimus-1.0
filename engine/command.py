@@ -1,15 +1,89 @@
 import pyttsx3
+import speech_recognition as sr
+import eel
 
-# For Mac, If you face error related to "pyobjc" when running the `init()` method :
-# Install 9.0.1 version of pyobjc : "pip install pyobjc>=9.0.1"
+# =========================
+# SPEECH ENGINE SETUP
+# =========================
 
+engine = pyttsx3.init('nsss')
+voices = engine.getProperty('voices')
+engine.setProperty(
+    'voice',
+    voices[19].id
+)
+engine.setProperty('rate', 165)
+engine.setProperty('volume', 1)
+
+
+# =========================
+# SPEAK FUNCTION
+# =========================
+
+@eel.expose
 def speak(text):
-    engine = pyttsx3.init('nsss')
-    voices = engine.getProperty('voices')
-    print(voices)
-    engine.setProperty('voice', voices[19].id)
-    engine.setProperty('rate', 125)
     engine.say(text)
     engine.runAndWait()
 
-speak("Welcome Back Boss!")
+# =========================
+# TAKE COMMAND
+# =========================
+
+def takeCommand():
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Listening...")
+        r.pause_threshold = 1
+        r.energy_threshold = 300
+        r.adjust_for_ambient_noise(
+            source,
+            duration=1
+        )
+        audio = r.listen(
+            source,
+            timeout=10,
+            phrase_time_limit=8
+        )
+    try:
+        print("Recognizing...")
+        query = r.recognize_google(
+            audio,
+            language="en-IN"
+        )
+        print(f"User Said: {query}")
+        # speak(query)
+        return query.lower()
+    except Exception as e:
+        print("Error:", e)
+        return ""
+
+# text = takeCommand()
+# speak(text)
+
+
+@eel.expose
+def allCommands():
+    query = takeCommand()
+    print(query)
+    if (
+        "in chrome" in query 
+        or "in google chrome" in query
+        or "in safari" in query
+        ) and (
+        "youtube" in query
+        or "google" in query
+        or "facebook" in query
+        or "instagram" in query
+        or "github" in query
+        or "chatgpt" in query
+        ):
+        from engine.features import openWebsite
+        openWebsite(query)
+    elif "open" in query:
+        from engine.features import openCommand
+        openCommand(query)
+    elif "on youtube" in query:
+        from engine.features import PlayYoutube
+        PlayYoutube(query)
+    else:
+        print("Not Run")
