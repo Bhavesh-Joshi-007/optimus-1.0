@@ -60,19 +60,99 @@ def openCommand(query):
         speak(f"Unable to open {app_name}, {app_name} doesn't exists in our system sir!")
 
 
-# def openCommand(query):
-#     query = query.replace(ASSISTANT_NAME, "")
-#     query = query.replace("open", "")
-#     query.lower()
+from urllib.parse import quote_plus
+import subprocess
 
-#     if query != "":
-#         speak("Opening" + query)
-#         # os.system('open' + query)
-#         # os.system("open -a " + query)
-#         print("query is : ", query)
-#         subprocess.run(["open", "-a", query.title()])
-#     else:
-#         speak("not found")
+
+def searchOnBrowser(query):
+    query = query.lower()
+    # =========================
+    # DETECT BROWSER
+    # =========================
+    browser = None
+
+    if (
+        "google chrome" in query
+        or "chrome" in query
+    ):
+        browser = "Google Chrome"
+    elif "safari" in query:
+        browser = "Safari"
+
+    if not browser:
+        speak("Please specify Chrome or Safari")
+        return
+
+    # =========================
+    # CLEAN QUERY
+    # =========================
+
+    remove_words = [
+        "search",
+        "find",
+        "look for",
+        "on google chrome",
+        "in google chrome",
+        "on chrome",
+        "in chrome",
+        "on safari",
+        "in safari",
+        "using chrome",
+        "using safari"
+    ]
+
+    search_term = query
+
+    for word in remove_words:
+        search_term = search_term.replace(
+            word,
+            ""
+        )
+
+    search_term = search_term.strip()
+
+    if not search_term:
+        speak(
+            "Please tell me what to search."
+        )
+        return
+
+    # =========================
+    # BUILD SEARCH URL
+    # =========================
+
+    search_url = (
+        "https://www.google.com/search?q="
+        + quote_plus(search_term)
+    )
+
+    print("Browser :", browser)
+    print("Search  :", search_term)
+    print("URL     :", search_url)
+
+    # =========================
+    # OPEN IN BROWSER
+    # =========================
+
+    try:
+        speak(
+            f"Searching {search_term}"
+        )
+
+        subprocess.run(
+            [
+                "open",
+                "-a",
+                browser,
+                search_url
+            ]
+        )
+    except Exception as e:
+        print(e)
+        speak(
+            "Unable to perform search."
+        )
+
 
 def openWebsite(query):
     query = query.lower()
@@ -86,101 +166,85 @@ def openWebsite(query):
         "chatgpt": "https://chatgpt.com",
         "amazon": "https://www.amazon.in",
         "netflix": "https://www.netflix.com",
-        "gmail": "https://mail.google.com"
+        "gmail": "https://mail.google.com",
+        "whatsapp": "https://web.whatsapp.com/"
     }
+
+    # =========================
+    # DETECT BROWSER
+    # =========================
 
     browser = None
 
-    if "in chrome" in query or "in google chrome" in query:
+    if (
+        "google chrome" in query
+        or "chrome" in query
+    ):
         browser = "Google Chrome"
-    elif "in safari" in query:
+    elif "safari" in query:
         browser = "Safari"
 
-    website = None
-    website_name = None
+    # =========================
+    # CLEAN QUERY
+    # =========================
+    clean_query = query
+    remove_words = [
+        "open",
+        "on google chrome",
+        "in google chrome",
+        "on chrome",
+        "in chrome",
+        "on safari",
+        "in safari"
+    ]
 
-    for key, value in websites.items():
-        if key in query:
-            website_name = key
-            website = value
-            break
+    for word in remove_words:
+        clean_query = clean_query.replace(word, "")
+
+    clean_query = clean_query.strip()
+
+    print("Original Query :", query)
+    print("Clean Query    :", clean_query)
+
+    # =========================
+    # FIND WEBSITE
+    # =========================
+
+    website = websites.get(clean_query)
+
     if not website:
-        speak("I could not identify the website.")
+        speak(f"I could not identify {clean_query}")
         return
-    if not browser:
-        speak("Please specify Chrome or Safari.")
-        return
+
+    # =========================
+    # OPEN WEBSITE
+    # =========================
+
     try:
-        speak(f"Opening {website_name} in {browser}")
-        subprocess.run(
-            [
+        speak(f"Opening {clean_query} in {browser}")
+        if browser == "Google Chrome":
+            subprocess.run([
                 "open",
                 "-a",
-                browser,
+                "Google Chrome",
                 website
-            ],
-            check=True
-        )
+            ])
+        elif browser == "Safari":
+            subprocess.run([
+                "open",
+                "-a",
+                "Safari",
+                website
+            ])
     except Exception as e:
         print("Website Error:", e)
         speak("Unable to open the website.")
-
-# def openWebsite(query):
-#     query = query.lower()
-#     websites = {
-#         "youtube": "https://www.youtube.com",
-#         "google": "https://www.google.com",
-#         "google chrome": "https://www.google.com",
-#         "facebook": "https://www.facebook.com",
-#         "instagram": "https://www.instagram.com",
-#         "linkedin": "https://www.linkedin.com",
-#         "github": "https://www.github.com",
-#         "chatgpt": "https://chatgpt.com",
-#         "amazon": "https://www.amazon.in",
-#         "netflix": "https://www.netflix.com",
-#         "gmail": "https://mail.google.com"
-#     }
-
-#     browser = None
-
-#     if "in chrome" in query or "in google chrome" in query:
-#         browser = "Google Chrome"
-#     elif "in safari" in query:
-#         browser = "Safari"
-
-#     website = None
-
-#     for key in websites:
-#         if key in query:
-#             website = websites[key]
-#             break
-
-#     if not website:
-#         speak("I could not identify the website.")
-#         return
-
-#     if not browser:
-#         speak("Please specify Chrome or Safari.")
-#         return
-
-#     try:
-#         speak(f"Opening {key} in {browser}")
-#         subprocess.run([
-#             "open",
-#             "-a",
-#             browser,
-#             website
-#         ])
-#     except Exception as e:
-#         print(e)
-#         speak("Unable to open the website.")
 
 
 def PlayYoutube(query):
     search_term = extract_yt_term(query)
     speak(f"Playing {search_term} on Youtube")
     kit.playonyt(search_term)
-
 
 
 def extract_yt_term(command):

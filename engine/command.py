@@ -57,17 +57,23 @@ def takeCommand():
         print("Error:", e)
         return ""
 
-# text = takeCommand()
-# speak(text)
-
 
 @eel.expose
 def allCommands():
     query = takeCommand()
     print(query)
     if (
+        "search" in query
+        or "find" in query
+        or "look for" in query
+        ):
+        from engine.features import searchOnBrowser
+        searchOnBrowser(query)
+    elif (
         "in chrome" in query 
         or "in google chrome" in query
+        or "on google chrome" in query
+        or "on chrome" in query
         or "in safari" in query
         ) and (
         "youtube" in query
@@ -76,6 +82,7 @@ def allCommands():
         or "instagram" in query
         or "github" in query
         or "chatgpt" in query
+        or "whatsapp" in query
         ):
         from engine.features import openWebsite
         openWebsite(query)
