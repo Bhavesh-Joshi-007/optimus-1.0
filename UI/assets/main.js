@@ -12,9 +12,9 @@ window.addEventListener("load", () => {
   });
 
   // Delayed startup sound
-  setTimeout(async () => {
-    await eel.playOptimusInitialised()();
-  }, 1200);
+  // setTimeout(async () => {
+  //   await eel.playOptimusInitialised()();
+  // }, 1200);
 
   // Core pulse
   gsap.to(".core", {
@@ -211,7 +211,7 @@ window.addEventListener("load", () => {
     // START LISTENING
     // =========================
 
-    let command = await eel.allCommands()();
+    let command = await eel.manualCommand()();
 
     console.log("User Said:", command);
 
@@ -232,7 +232,7 @@ window.addEventListener("load", () => {
     // PLAY SWITCH SOUND
     // =========================
 
-    await eel.playOptimusSwitchUp()();
+    // await eel.playOptimusSwitchUp()();
 
     // =========================
     // SHOW OPTIMUS AGAIN

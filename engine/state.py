@@ -1,0 +1,1 @@
+WAKEWORD_ACTIVE = True

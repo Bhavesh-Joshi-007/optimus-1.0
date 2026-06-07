@@ -1,6 +1,7 @@
 import pyttsx3
 import speech_recognition as sr
 import eel
+from engine import state
 
 # =========================
 # SPEECH ENGINE SETUP
@@ -59,8 +60,7 @@ def takeCommand():
 
 
 @eel.expose
-def allCommands():
-    query = takeCommand()
+def allCommands(query):
     print(query)
     if (
         "search" in query
@@ -75,6 +75,7 @@ def allCommands():
         or "on google chrome" in query
         or "on chrome" in query
         or "in safari" in query
+        or "on safari" in query
         ) and (
         "youtube" in query
         or "google" in query
@@ -94,3 +95,14 @@ def allCommands():
         PlayYoutube(query)
     else:
         print("Not Run")
+
+
+@eel.expose
+def manualCommand():
+    state.WAKEWORD_ACTIVE = False
+    query = takeCommand()
+    if query:
+        allCommands(query)
+        
+    state.WAKEWORD_ACTIVE = True
+    return query
