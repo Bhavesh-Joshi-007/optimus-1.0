@@ -87,6 +87,9 @@ def allCommands(query):
         ):
         from engine.features import openWebsite
         openWebsite(query)
+    elif "send" in query and "message" in query:
+        from engine.features import sendWhatsappMessage
+        sendWhatsappMessage(query)
     elif "open" in query:
         from engine.features import openCommand
         openCommand(query)

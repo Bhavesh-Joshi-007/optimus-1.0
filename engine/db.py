@@ -1,7 +1,7 @@
 import sqlite3
 import csv
 
-conn = sqlite3.connect("optimus.db")
+conn = sqlite3.connect("optimus.db", check_same_thread=False)
 cursor = conn.cursor()
 
 # query = '''
@@ -30,9 +30,9 @@ cursor = conn.cursor()
 # conn.commit()
 # conn.close()
 
-query = 'Bhavesh'
-query = query.strip().lower()
+# query = 'Bhavesh'
+# query = query.strip().lower()
 
-cursor.execute("SELECT mobile_no FROM contacts WHERE LOWER(name) LIKE ? OR LOWER(name) LIKE ?", ('%' + query + '%', query + '%'))
-results = cursor.fetchall()
-print(results[0][0])
+# cursor.execute("SELECT mobile_no FROM contacts WHERE LOWER(name) LIKE ? OR LOWER(name) LIKE ?", ('%' + query + '%', query + '%'))
+# results = cursor.fetchall()
+# print(results[0][0])

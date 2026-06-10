@@ -6,12 +6,12 @@ import eel
 import os
 from engine.config import ASSISTANT_NAME 
 from engine.command import speak
-from engine.helper import remove_words
-import pywhatkit as kit 
-import sqlite3
+from engine.helper import remove_words  
+from engine.db import cursor
+import pywhatkit
 
-conn = sqlite3.connect("optimus.db")
-cursor = conn.cursor()
+# conn = sqlite3.connect("optimus.db")
+# cursor = conn.cursor()
 
 @eel.expose
 def playAssistantSound():
@@ -259,54 +259,150 @@ def extract_yt_term(command):
     return match.group(1) if match else None 
 
 
+# def findContact(query):
+#     words_to_remove = [ASSISTANT_NAME, 'make', 'a', 'to', 'phone', 'call', 'send', 'message', 'whatsapp', 'video']
+#     query = remove_words(query, words_to_remove)
+
+#     try:
+#         query = query.strip().lower()
+#         cursor.execute('SELECT mobile_no FROM contacts WHERE LOWER(name) LIKE ? OR LOWER(name) LIKE ?', ('%' + query + '%', query + '%'))
+#         results = cursor.fetchall()
+#         print(results[0][0])
+#         mobile_number_str = str(results[0][0])
+
+#         if not mobile_number_str.startswith('+91'):
+#             mobile_number_str = '+91' + mobile_number_str
+
+#         return mobile_number_str, query
+#     except:
+#         speak('User not exists in your contacts!')
+#         return 0, 0
+
 def findContact(query):
-    words_to_remove = [ASSISTANT_NAME, 'make', 'a', 'to', 'phone', 'call', 'send', 'message', 'whatsapp', 'video']
+    print("ORIGINAL QUERY:", query)
+    words_to_remove = [
+        ASSISTANT_NAME,
+        "make",
+        "a",
+        "to",
+        "tu",
+        "phone",
+        "call",
+        "send",
+        "message",
+        "whatsapp",
+        "video"
+    ]
+
     query = remove_words(query, words_to_remove)
+    print("AFTER CLEANING:", query)
 
     try:
         query = query.strip().lower()
-        cursor.execute('SELECT mobile_no FROM contacts WHERE LOWER(name) LIKE ? OR LOWER(name) LIKE ?', ('%' + query + '%', query + '%'))
+        cursor.execute(
+            '''
+            SELECT mobile_no
+            FROM contacts
+            WHERE LOWER(name) LIKE ?
+            OR LOWER(name) LIKE ?
+            ''',
+            (
+                '%' + query + '%',
+                query + '%'
+            )
+        )
+
         results = cursor.fetchall()
-        print(results[0][0])
+        print("DATABASE RESULT:", results)
+
         mobile_number_str = str(results[0][0])
 
-        if not mobile_number_str.startswith('+91'):
-            mobile_number_str = '+91' + mobile_number_str
-
+        if not mobile_number_str.startswith("+91"):
+            mobile_number_str = "+91" + mobile_number_str
         return mobile_number_str, query
-    except:
-        speak('User not exists in your contacts!')
+    except Exception as e:
+        print("CONTACT ERROR:", e)
+        speak("User not exists in your contacts")
         return 0, 0
     
  
 def whatsapp(mobile_no, message, flag, name):
-    if flag == 'message':
-        target_tab = 12
-        optimus_message = "message sent successfully to " + name
-    elif flag == 'call':
-        target_tab = 7 
-        message = ''
-        optimus_message = "calling to " + name
-    else: 
-        target_tab = 6
-        message = ''
-        optimus_message = 'Starting video call with ' + name
+    try:
+        if flag == "message":
+            speak(f"Sending message to {name}")
+            pywhatkit.sendwhatmsg_instantly(
+                phone_no=mobile_no,
+                message=message,
+                wait_time=15,
+                tab_close=True,
+                close_time=3
+            )
 
-    encoded_message = qoute(message)
+            speak(f"Message sent to {name}")
+        else:
+            speak("Currently only message sending is supported")
 
-    whatsapp_url = f"whatsapp://send/phone={mobile_no}&text={encoded_message}"
+    except Exception as e:
+        print("WhatsApp Error:", e)
+        speak("Unable to send the message")
 
-    full_command = f'start "" " {whatsapp_url}"'
 
-    subprocess.run(full_command, shell=True)
-    time.sleep(5)
-    subprocess.run(full_command, shell=True)
+# def sendWhatsappMessage(query):
+#     mobile_no, name = findContact(query)
+#     if mobile_no == 0:
+#         return
 
-    pyautogui.hotkey("ctrl", "f")
+#     speak(f"What message should I send to {name}")
 
-    for i in range(1, target_tab):
-        pyautogui.hotkey('tab')
-        
-    pyautogui.hotkey('enter')
-    speak(optimus_message)
+#     from engine.command import takeCommand
 
+#     message = takeCommand()
+
+#     if not message:
+#         speak("Message cancelled")
+#         return
+
+#     whatsapp(
+#         mobile_no,
+#         message,
+#         "message",
+#         name
+#     )
+
+
+
+def sendWhatsappMessage(query):
+
+    print("STEP 1 - Inside sendWhatsappMessage")
+
+    mobile_no, name = findContact(query)
+
+    print("STEP 2")
+    print("Mobile:", mobile_no)
+    print("Name:", name)
+
+    if mobile_no == 0:
+        print("STEP 3 - Contact Not Found")
+        return
+
+    speak(f"What message should I send to {name}")
+
+    from engine.command import takeCommand
+
+    message = takeCommand()
+
+    print("STEP 4")
+    print("Message:", message)
+
+    if not message:
+        print("STEP 5 - Empty Message")
+        return
+
+    whatsapp(
+        mobile_no,
+        message,
+        "message",
+        name
+    )
+
+    print("STEP 6 - Whatsapp Function Called")
